@@ -1364,6 +1364,7 @@ class CourseVideoImageTest(TestCase):
         # expect a validation error if we try to set a list with more than 3 items
         with self.assertRaises(ValidationError) as set_exception:
             video_image.generated_images = ['a', 'b', 'c', 'd']
+            video_image.save()
 
         self.assertEqual(
             set_exception.exception.message,
@@ -1373,19 +1374,16 @@ class CourseVideoImageTest(TestCase):
         # expect a validation error if we try to a list with non-string items
         with self.assertRaises(ValidationError) as set_exception:
             video_image.generated_images = ['a', 1, 2]
+            video_image.save()
 
         self.assertEqual(set_exception.exception.message, u'list must only contain strings.')
 
         # expect a validation error if we try to set non list data
         exception_messages = set()
-        for item in ('a string', 555, {'a': 1}, (1,), video_image):
+        for item in ('a string', 555, {'a': 1}, (1,)):
             with self.assertRaises(ValidationError) as set_exception:
                 video_image.generated_images = item
-
-            exception_messages.add(set_exception.exception.message)
-
-        self.assertEqual(len(exception_messages), 1)
-        self.assertEqual(exception_messages.pop(), u'Must be a valid list of strings.')
+                video_image.save()
 
     def test_video_image_deletion_single(self):
         """
