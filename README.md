@@ -35,7 +35,7 @@ Developing
 First, create a virtual environment:
 ```
 virtualenv venvs/val
-source venvs/bal/bin/activate
+source venvs/val/bin/activate
 ```
 
 To run tests:

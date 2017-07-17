@@ -1306,8 +1306,10 @@ class CourseVideoImageTest(TestCase):
         video_data = list(video_data_generator)[0]
         self.assertEqual(video_data['courses'][0]['test-course'], self.image_url)
 
+    # attr_class is django magic: https://github.com/django/django/blob/master/django/db/models/fields/files.py#L214
+    @patch('edxval.models.CustomizableImageField.attr_class.save', side_effect = Exception("pretend save doesn't work"))
     @patch('edxval.models.logger')
-    def test_create_or_update_logging(self, mock_logger):
+    def test_create_or_update_logging(self, mock_logger, mock_image_save):
         """
         Tests correct message is logged when save to storge is failed in `create_or_update`.
         """
