@@ -52,6 +52,6 @@ setup(
         'Programming Language :: Python',
     ],
     packages=PACKAGES,
-    install_requires=load_requirements('requirements.txt', 'tox-requirements.txt'),
+    install_requires=load_requirements('requirements.txt', 'django-requirements.txt'),
     tests_require=load_requirements('test-requirements.txt'),
 )
