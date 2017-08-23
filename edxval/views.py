@@ -1,6 +1,7 @@
 """
 Views file for django app edxval.
 """
+from __future__ import unicode_literals
 from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework.authentication import SessionAuthentication
@@ -131,7 +132,7 @@ class VideoImagesView(APIView):
 
         try:
             course_video = CourseVideo.objects.select_related('video_image').get(
-                course_id=unicode(course_id), video__edx_video_id=edx_video_id
+                course_id=course_id, video__edx_video_id=edx_video_id
             )
         except CourseVideo.DoesNotExist:
             return Response(

@@ -1,20 +1,18 @@
 # pylint: disable=E1101
-# -*- coding: utf-8 -*-
 """
 The internal API for VAL.
 """
+from __future__ import unicode_literals
 import logging
 
 from lxml.etree import Element, SubElement
 from enum import Enum
 
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
-from django.core.files.base import ContentFile
 
 from edxval.models import Video, EncodedVideo, CourseVideo, Profile, VideoImage
 from edxval.serializers import VideoSerializer
-from edxval.exceptions import (  # pylint: disable=unused-import
-    ValError,
+from edxval.exceptions import (
     ValInternalError,
     ValVideoNotFoundError,
     ValCannotCreateError,
@@ -350,7 +348,7 @@ def get_videos_for_course(course_id, sort_field=None, sort_dir=SortDirection.asc
         total order.
     """
     return _get_videos_for_filter(
-        {'courses__course_id': unicode(course_id), 'courses__is_hidden': False},
+        {'courses__course_id': course_id, 'courses__is_hidden': False},
         sort_field,
         sort_dir,
     )
@@ -447,7 +445,6 @@ def get_video_info_for_course_and_profiles(course_id, profiles):
         }
     """
     # In case someone passes in a key (VAL doesn't really understand opaque keys)
-    course_id = unicode(course_id)
     try:
         encoded_videos = EncodedVideo.objects.filter(
             profile__profile_name__in=profiles,
@@ -489,7 +486,7 @@ def copy_course_videos(source_course_id, destination_course_id):
         return
 
     course_videos = CourseVideo.objects.select_related('video', 'video_image').filter(
-        course_id=unicode(source_course_id)
+        course_id=source_course_id
     )
 
     for course_video in course_videos:
@@ -531,7 +528,7 @@ def export_to_xml(edx_video_id, course_id=None):
         'video_asset',
         attrib={
             'client_video_id': video.client_video_id,
-            'duration': unicode(video.duration),
+            'duration': video.duration,
             'image': video_image_name
         }
     )
@@ -540,7 +537,7 @@ def export_to_xml(edx_video_id, course_id=None):
             video_el,
             'encoded_video',
             {
-                name: unicode(getattr(encoded_video, name))
+                name: getattr(encoded_video, name)
                 for name in ['profile', 'url', 'file_size', 'bitrate']
             }
         )

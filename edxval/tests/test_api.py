@@ -2,6 +2,7 @@
 """
 Tests for the API for Video Abstraction Layer
 """
+from __future__ import unicode_literals
 import json
 
 import mock
@@ -202,7 +203,7 @@ class CreateProfileTest(TestCase):
         """
         api.create_profile(constants.PROFILE_DESKTOP)
         profiles = list(Profile.objects.all())
-        profile_names = [unicode(profile) for profile in profiles]
+        profile_names = [profile for profile in profiles]
         self.assertEqual(len(profiles), 7)
         self.assertIn(
             constants.PROFILE_DESKTOP,
@@ -964,7 +965,7 @@ class ImportTest(TestCase):
         import_xml = etree.Element(
             "video_asset",
             attrib={
-                key: unicode(video_dict[key])
+                key: video_dict[key]
                 for key in ["client_video_id", "duration"]
             }
         )
@@ -977,7 +978,7 @@ class ImportTest(TestCase):
                 import_xml,
                 "encoded_video",
                 attrib={
-                    key: unicode(val)
+                    key: val
                     for key, val in encoding_dict.items()
                 }
             )
